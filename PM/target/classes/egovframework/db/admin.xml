@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.egov.namul.mapper.AdminMapper">
+	
+	<resultMap id="admin" type="com.egov.namul.vo.AdminVO">
+		<result property="_id" column="_id"/>
+		<result property="_profile" column="_profile"/>
+		<result property="identifier" column="identifier"/>
+		<result property="password" column="password"/>
+		<result property="name" column="name"/>
+		<result property="permission" column="permission"/>
+		<result property="position" column="position"/>
+		<result property="resign" column="resign"/>
+		<result property="createdAt" column="createdAt"/>
+		<result property="updatedAt" column="updatedAt"/>
+		<result property="deletedAt" column="deletedAt"/>
+	</resultMap>
+	
+	<!-- 로그인 접속 구현 sql -->
+	<select id="loginAdmin" parameterType="adminVO" resultType="HashMap">
+		select * from admins
+		where identifier = #{identifier} and password = HEX(AES_ENCRYPT(#{password},'enc-key'))
+	</select>
+	
+	<select id="selectAdmin" resultMap="admin">
+		select * from admins
+		where identifier = #{identifier} and password = HEX(AES_ENCRYPT(#{password},'enc-key'))
+	</select>
+	
+	<!-- 리스트 총 갯수 확인 Mapper -->
+	<select id="countList" resultType="int">		
+		select count(_id) from users where 1=1 and type=#{type}
+			<if test="name != null">
+				and name=#{name}
+			</if>
+	</select>
+	
+	<select id="countAdminList" resultType="int">		
+		select count(_id) from admins where 1=1
+			<if test="name != null">
+				and name=#{name}
+			</if>
+	</select>
+	
+	<select id="countPofolList" resultType="int">		
+		select count(_id) from portfolios where 1=1
+			<if test='name != null and name != ""'>
+				and name=#{name}
+			</if>
+	</select>
+	
+	<!-- 리스트 출력 and 페이징처리 -->
+	<select id="listMapping" resultType="HashMap">
+		select * from users where 1=1 and type=#{type}
+			<if test="name != null">
+				and name like CONCAT('%',#{name},'%')
+			</if>
+		limit #{displayPost}, #{postNum}
+	</select>
+			
+		
+	<select id="userView" resultType="HashMap">
+		select * from users where _id = #{_id} and type=#{type}
+	</select>
+	
+	<update id="userUpdate">
+		update users set name=#{name}, birth=#{birth}, gender=#{gender}, phone=#{phone}, email=#{email}, university=#{university}, universityMajor=#{universityMajor}, universityNumber=#{universityNumber}   where _id = #{_id}
+	</update>
+	
+	<delete id="deleteUser" parameterType="int">
+		delete from users 
+		<where>
+			FIND_IN_SET(_id, #{_id})
+		</where>
+		
+	</delete>
+	
+	<update id="updatePw">
+		update users set password = HEX(AES_ENCRYPT(#{password},'enc-key'))   where _id = #{_id}
+	</update>
+	
+	<select id="userPofol" resultType="HashMap">
+	<if test="type == 'student'">
+		select * from portfolios a left join users b on a._user = b._id where  a._user = #{_id}
+		<if test="search != null">
+			and a.name like CONCAT('%',#{search},'%')
+		</if>
+	</if>
+	<if test="type == 'professor'">
+		select * from portfolios a left join users b on a._user = b._id where  a._professor = #{_id}
+		<if test="search != null">
+			and a.name like CONCAT('%',#{search},'%')
+		</if>
+	</if>
+	<if test="type == 'enterprise'">
+		select * from portfolios a left join portfolioenter b on a._id = b._portfolio where  b._enterprise= #{_id}
+		<if test="search != null">
+			and a.name like CONCAT('%',#{search},'%')
+		</if>
+	</if>
+	limit #{displayPost}, #{postNum}
+	</select>
+	
+	<insert id="insertPofol" useGeneratedKeys="true" keyProperty="_id">
+		insert into portfolios ( _user, _professor,_leader, name, type, status, startDate, endDate, link, content,createdAt,updatedAt)
+		values(#{_user},#{_professor},#{_leader},#{name},#{type},#{status},#{startDate},#{endDate},#{link},#{content},now(),now())
+	</insert>
+	
+	<select id="listAdmin" resultType="HashMap">
+		select * from admins where 1=1
+			<if test="name != null">
+				and name like CONCAT('%',#{name},'%')
+			</if>
+		limit #{displayPost}, #{postNum}
+	</select>
+	
+	<select id="View" resultType="HashMap">
+		select * from admins where _id = #{_id}
+	</select>
+	
+	<update id="edit">
+		update admins set name=#{name}, updatedAt =now()  where _id = #{_id}
+	</update>
+	
+	<delete id="deleteAdmin" parameterType="int">
+		delete from admins
+		<where>
+			FIND_IN_SET(_id, #{_id})
+		</where>
+	</delete>
+	
+	<update id="adminPw">
+		update admins set password = HEX(AES_ENCRYPT(#{password},'enc-key'))   where _id = #{_id}
+	</update>
+	
+	<insert id="register">
+		insert into admins (identifier, password, name, createdAt,updatedAt)
+		values(#{identifier},HEX(AES_ENCRYPT(#{password},'enc-key')), #{name}, now(),now())
+	</insert>
+	
+	<select id="pofolList" resultType="HashMap">
+		select * from portfolios
+			<if test='name != null  and name != "" '>
+				where name like CONCAT('%',#{name},'%')
+			</if>
+		limit #{displayPost}, #{postNum}
+	</select>
+	
+	<select id="idCheck" resultType="int">
+	      select count(*) from users where identifier = #{identifier}
+	</select>
+	
+	<insert id="insertPortfolioMember">
+		insert portfoliousers(_user, _portfolio, createdAt, updatedAt) values(#{member}, #{portfolio}, now(), now())
+	</insert>
+	
+	<!-- 
+	<select id="find_id" parameterType="String" resultType="String">
+		select identifier from users where name=#{name} and phone=#{phone} and birth=#{birth}
+	</select>
+	
+	<update id="emailPw" parameterType="userVO">
+		update users set password=HEX(AES_ENCRYPT(#{password},'enc-key'))  where _id = #{_id}
+	</update>
+		
+	<select id="checkId" resultType="String">
+		select _id from users where identifier=#{identifier} and phone=#{phone} and email=#{email}
+	</select>
+	
+	<update id="insertProfile"  parameterType="userVO">
+		update users set _profile=#{fileUrl} where identifier =#{identifier}
+	</update>
+	
+	<select id="findUser" resultType="HashMap">
+		select * from users 
+		where _id =#{_id}
+	</select>
+	
+	 -->
+
+</mapper>

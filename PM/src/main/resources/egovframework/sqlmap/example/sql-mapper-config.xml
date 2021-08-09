@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+    <typeAliases>
+		<typeAlias alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+		<typeAlias alias="sampleVO" type="com.egov.namul.vo.SampleVO"/>
+		<typeAlias alias="userVO" type="com.egov.namul.vo.UserVO"/>
+		<typeAlias alias="menuVO" type="com.egov.namul.vo.MenuVO"/>
+		<typeAlias alias="portfolioVO" type="com.egov.namul.vo.PortfolioVO"/>
+		<typeAlias alias="adminVO" type="com.egov.namul.vo.AdminVO"/>
+    </typeAliases>
+</configuration>

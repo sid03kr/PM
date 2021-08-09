@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.egov.namul.mapper.UserMapper">
+	
+	<resultMap id="user" type="com.egov.namul.vo.UserVO">
+		<result property="_id" column="_id"/>
+		<result property="_profile" column="_profile"/>
+		<result property="identifier" column="identifier"/>
+		<result property="type" column="type"/>
+		<result property="password" column="password"/>
+		<result property="name" column="name"/>
+		<result property="birth" column="birth"/>
+		<result property="gender" column="gender"/>
+		<result property="phone" column="phone"/>
+		<result property="email" column="email"/>
+		<result property="university" column="university"/>
+		<result property="universityMajor" column="universityMajor"/>
+		<result property="universityNumber" column="universityNumber"/>
+		<result property="createdAt" column="createdAt"/>
+		<result property="updatedAt" column="updatedAt"/>
+		<result property="deletedAt" column="deletedAt"/>
+		
+	</resultMap>
+	
+	<!-- 로그인 접속 구현 sql -->
+	<select id="loginUser" parameterType="userVO" resultType="HashMap">
+		select * from users
+		where identifier = #{identifier} and password = HEX(AES_ENCRYPT(#{password},'enc-key'))
+	</select>
+	
+	<select id="selectUser" resultMap="user">
+		select * from users
+		where identifier = #{identifier} and password = HEX(AES_ENCRYPT(#{password},'enc-key'))
+	</select>
+			
+	
+	<!-- 회원가입 구현 sql -->
+	<insert id="join" parameterType="userVO">
+		insert into users 
+		value (#{_profile},#{identifier},#{type},#{password},#{name},#{birth},#{gender},#{phone},#{email},#{university},#{universityMajor},#{universityNumber})
+	</insert>
+		
+
+
+</mapper>

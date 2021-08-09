@@ -1,0 +1,39 @@
+.jq-jesse {
+	margin: 0;
+	padding: 0;
+	position: relative;
+}
+.jq-jesse:after{
+	content: "";
+	display: block;
+	clear: both;
+}
+.jq-jesse__item {
+	list-style: none;
+	width: 100px;
+	height: 100px;
+	float: left;
+	border-right:1px solid #ddd;
+	border-bottom:1px solid #ddd;
+	line-height: 100px;
+	text-align: center;
+	color: #fff;
+	font-size: 24px;
+}
+.jq-jesse__item._isDragged{
+	cursor: move;
+	position: absolute;
+}
+
+.jq-jesse__placeholder{
+	width: 100px;
+	height: 100px;
+	list-style: none;
+	float: left;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	border-right:1px solid #ddd;
+	border-bottom:1px solid #ddd;
+	border: 1px dotted #ccc;
+	background: rgba(0,0,0, 0.4);
+}

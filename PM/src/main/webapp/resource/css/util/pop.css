@@ -1,0 +1,170 @@
+
+
+.dialog__content .dialog_body {height: auto;display: inline-block;width: 100%;}
+.dialog__content .dialog_body input {height:30px;}
+.dialog__content .dialog_body .bottom_btn {padding:15px 0 5px 0; margin:0;width: 100%;height: auto;display:inline-block;}
+.dialog__content .dialog_body .list_box ul {padding:0;border-bottom:1px solid #ccc;}
+.dialog__content .dialog_body .list_box ul li {height:auto;border-right:1px solid #ccc}
+.dialog__content .dialog_body .list_box ul li:nth-last-child(1) {height:auto;border-right:0}
+.dialog__content .dialog_body .body_top ul {padding:0}
+.dialog__content .dialog_body table th {border-right: 1px solid #ccc;}
+
+.dialog_body ul li select {width:100%;}
+
+
+.dialog_body form > div.ta_right {width:50%;float:none; }
+.dialog_body form > div.search {float:left;text-align: left;}
+.dialog_body form > div p {float: left;width: 100px;text-align: right;line-height: 30px;padding-right: 10px;}
+.dialog_body form > div.search select {width: 120px;height: 30px;outline: none;}
+.dialog_body form > div.right_btn {text-align: right;}
+
+.dialog_body form div button {margin-right:10px;}
+.dialog_body form div button:nth-last-child(1) {margin-right:5px;}
+.dialog_body .right_btn .close_btn i {font-size:1.3em}
+.dialog_body .body_left { padding:5px 5px 0 0; width:50%;height:calc(100% - 40px);float:left}
+.dialog_body .body_right {padding:5px 0 0 5px; width:50%;height:calc(100% - 40px);float:left}
+.dt,
+.dw {border:1px solid #ccc;width:100%; height:100%;}
+.dialog_body .body_left .dt ul {padding:0;width:100%;display: inline-block;border-bottom:1px solid #ccc;}
+.dialog_body .body_left .dt ul li {height: 30px;line-height: 30px;display: inline-block;padding:0; border-right:1px solid #ccc;}
+.body_left .dt ul li:nth-last-child(1) {border-right:0;}
+label.file_btn {height:30px; border:1px solid #ccc;border-radius:3px;display: inline-block;line-height: 30px;width: 80px;text-align: center;margin-right: 10px;}
+
+/*
+.dt_box .list_box {border:1px solid #ccc;}
+.dialog_body .dt_box {height: 80%;padding-top:10px;}
+.dialog_body .dt_box p {height: 30px;line-height: 30px;}
+.dialog_body .dt_box .list_box {height:100%;background: #fff;}
+
+*/
+.dialog__content .dialog_body .search_st ul li {height:auto;padding:0}
+.dialog__content .dialog_body .search_st ul li:nth-child(-n + 3) {padding-bottom:5px}
+.dialog__content .dialog_body .search_st ul li p {width:80px;}
+.dialog__content .dialog_body .search_st ul li input {width:120px;}
+.dialog__content .dialog_body .search_st .ta_right {line-height:65px;float:right;width: auto;}
+
+
+#file_set .dialog__content {width:90%;height:90%}
+#file_set .dialog_body {height: calc(100% - 42px);padding: 10px;}
+
+#file_set_dw .dialog__content {height:70%;}
+#file_set_dw .body_top form > div.search {width: auto;}
+#file_set_dw .body_top form > div {width: auto;float: left;}
+.body_top form .file_sch input[type="text"] {height: 30px;margin-right: 10px;}
+.body_top form .right_btn {float: left;width: auto;}
+#file_set_dw .dialog_body {height: calc(100% - 42px);padding: 10px;}
+
+#file_set_dw .dialog_body .bottom_btn {margin-bottom:5px;}
+
+.dialog_body .bottom_btn > div.center {float:none;}
+
+#file_set_chg .dialog_title {text-align: left;padding-left: 10px;}
+#file_set_chg .dialog_body {/* height: calc(100% - 42px); */padding: 10px;}
+#file_set_chg .dialog_body .btn {margin-top:10px;}
+
+#set_user .dialog__content {width:50%; height:70%;}
+#set_user .dialog_body {height: calc(100% - 42px);padding: 10px;}
+#set_user .dialog_body form > div.search > div {float:left; }
+#set_user .dialog_body form > div.search select {margin-right:0 }
+#set_user .dialog_body form .right_btn {float:right}
+#set_user .dialog_body .bottom_btn > div {float:none}
+
+
+#set_user_en .dialog__content ul {padding:0}
+#set_user_en .dialog_body form ul li:nth-child(1) {margin-bottom:20px;}
+#set_user_en .dialog_body li.w100 {display:inline-block;height:auto;padding: 5px 0 0 0;}
+#set_user_en .dialog_body li.w100 input {width:40%;}
+#set_user_en .dialog_body li.w100 select {width:40%;}
+#set_user_en .dialog_body li.w100 .btn {float: left;margin-left: 5px;}
+#set_user_en .dialog_body li.w100 p {display:inline-block;padding-left: 5px;}
+#set_user_en .dialog__content .dialog_btn {text-align:center;border:0; background:#efefef;padding: 30px;}
+
+#site_chg .dialog__content form {padding:0}
+#site_chg .dialog__content form ul {padding:0}
+#site_chg .dialog__content .bottom_btn > div {float:none}
+
+#mail_set .dialog_body .search {width: calc(100% - 105px);}
+#mail_set .dialog_body .search > div {float: left;}
+#mail_set .dialog_body .search p {width:80px}
+#mail_set .dialog_body .search input {width:130px; height:30px;}
+#mail_set .dialog_body .right_btn .btn {width:auto;}
+#mail_set .bottom_btn div {float:none;}
+#mail_set .dialog__content .bottom_btn {margin: 15px 0 5px;}
+
+#db_backup .search {width:100%}
+#db_backup .search > div {display:inline-block;}
+#db_backup .search > div input {width:130px;}
+#db_backup .search > div:nth-child(2) p {width:auto;}
+
+#db_backup_war .dialog__content {min-width: auto;}
+#db_backup_war .dialog_body > div:nth-child(1) {padding:0 20px;text-align:left;}
+#db_backup_war .dialog_title {text-align:left;padding-left:10px;}
+
+#system_info .dialog_body > div:nth-child(1) p {line-height: 30px;text-align: left;display: inline-block;}
+#system_info .dialog_title {text-align:left;padding-left:10px;}
+
+
+
+#pop_search form {padding:20px}
+#pop_search form div.w50 > div {float:left}
+
+
+#report_mms .search_st .search {width:50%;}
+
+#report_mms .search_st ul li:nth-child(-n + 4) {padding-bottom:5px}
+.dialog_body .search_st .search li > div i {font-size: 1.5em;vertical-align: bottom;padding: 0 5px;vertical-align: bottom;cursor:pointer;}
+
+#report_log .search_st .search {width:50%;}
+#report_log .search_st .search ul li {padding:0;}
+#report_log .search_st .ta_right {line-height:0;}
+#report_log .search_st .search ul li p {width:auto; padding-left:20px;}
+
+#report_arr .dialog_body .search_st div {width:auto}
+
+#report_temp .search_st ul li:nth-child(-n + 4) {padding-bottom:5px}
+
+#report_event .search_st ul li:nth-child(-n + 5) {padding-bottom:5px}
+#report_event .search_st .search {width:60%;}
+
+#report_as .dialog_body div.search select {width:150px;}
+
+#report_power .dialog_body form .search {width:40%}
+
+#report_power input[type="radio"] {display:block;width:13px; margin-right:5px;}
+.dialog__content .dialog_body form .search_rdo {float:left}
+.dialog__content .dialog_body form .search_rdo div ul li {line-height:30px;padding-right: 5px;}
+.dialog_body form .search_rdo ul li div {display:inline-block;}
+.dialog_body form .search_rdo .calendar i {padding-left:5px;font-size:1.3em;vertical-align: bottom;}
+
+
+
+#line_back .dialog_body {height:80%}
+
+.dialog_body .body_lf {width:45%;padding:10px;}
+.dialog_body .body_ct {width:calc(10% - 10px); margin:0 5px;}
+.dialog_body .body_rt {width:45%;padding:10px;}
+.dialog_body > div > div {display:inline-block;}
+.dialog_body .body_lf > div {float:left;}
+.dialog_body .body_rt > div {float:left;}
+.dialog_body > div .w70 {text-align: left;height:calc(100% - 87px);padding-right: 5px;}
+.dialog_body > div .w70 > div {border: 5px solid #ccc;border-radius:5px;height:100%}
+.dialog_body > div .title {height:30px;line-height:30px; padding-left:5px;}
+.dialog_body > div .info {width:100%}
+.dialog_body > div .info div {height:30px;line-height:30px;padding-left:10px;display:inline-block}
+.dialog_body > div .info > div:nth-child(1) {width:30%;}
+.dialog_body > div .radio_btn ul {padding:0}
+.dialog_body > div .radio_btn ul li {height:30px;line-height:20px;padding-left:10px;}
+.dialog_body > div .radio_btn input[type="radio"] {display:block;width:13px;height: 20px;margin-right: 5px;}
+.dialog_body > div .route {height:calc(100% - 100px);}
+.dialog_body > div .w30 {height:calc(100% - 87px);border: 1px solid #ccc;border-radius:5px;}
+.dialog_body > div .w100 {text-align: left;padding:0 20px;margin-top:5px;border-radius:5px;}
+.dialog_body > div .w100 > div {line-height:40px;}
+.dialog_body .body_ct .ct_color li {width:100%;height:28px; line-height:18px; width:100px;border-radius:20px;margin-bottom:5px;}
+.dialog_body .body_ct .ct_btn li {padding:0;height: auto;margin-bottom: 5px;}
+.dialog_body .body_ct .btn {width:100px;}
+.dialog_body .body_rt .w70 {padding:0 0 0 5px;}
+
+
+.dialog_body .file_name {border:1px solid #ccc; height:30px; padding:0 10px}
+.dialog_body .dialog_drow {min-height:200px}
+

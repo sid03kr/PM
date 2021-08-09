@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.egov.namul.mapper.UserMapper">
+	
+	<resultMap id="user" type="com.egov.namul.vo.UserVO">
+		<result property="_id" column="_id"/>
+		<result property="_profile" column="_profile"/>
+		<result property="identifier" column="identifier"/>
+		<result property="type" column="type"/>
+		<result property="password" column="password"/>
+		<result property="name" column="name"/>
+		<result property="birth" column="birth"/>
+		<result property="gender" column="gender"/>
+		<result property="phone" column="phone"/>
+		<result property="email" column="email"/>
+		<result property="university" column="university"/>
+		<result property="universityMajor" column="universityMajor"/>
+		<result property="universityNumber" column="universityNumber"/>
+		<result property="createdAt" column="createdAt"/>
+		<result property="updatedAt" column="updatedAt"/>
+		<result property="deletedAt" column="deletedAt"/>
+	</resultMap>
+	
+	<!-- 로그인 접속 구현 sql -->
+	<select id="loginUser" parameterType="userVO" resultType="HashMap">
+		select * from users
+		where identifier = #{identifier} and password = HEX(AES_ENCRYPT(#{password},'enc-key'))
+	</select>
+	
+	<select id="selectUser" resultMap="user">
+		select * from users
+		where identifier = #{identifier} and password = HEX(AES_ENCRYPT(#{password},'enc-key'))
+	</select>
+			
+	<!-- 회원가입 구현 sql -->
+	<insert id="register" parameterType="userVO">
+		insert into users (_profile,identifier,type,password,name,birth,gender,phone,email,university,universityMajor,universityNumber,createdAt,updatedAt)
+		values (#{_profile},#{identifier},#{type},HEX(AES_ENCRYPT(#{password},'enc-key')),#{name},#{birth},#{gender},#{phone},#{email},#{university},#{universityMajor},#{universityNumber},now(),now())
+	</insert>
+	
+	<!-- 회원정보 수정 구현 sql -->
+	<update id="userUpdate" parameterType="userVO">
+		update users set name=#{name}, password=HEX(AES_ENCRYPT(#{password},'enc-key')), birth=#{birth}, gender=#{gender}, phone=#{phone}, email=#{email}, university=#{university}, universityMajor=#{universityMajor}, universityNumber=#{universityNumber}   where _id = #{_id}
+	</update>
+	
+	<!-- 아이디 찾기 -->
+	<select id="find_id" parameterType="String" resultType="String">
+		select identifier from users where name=#{name} and phone=#{phone} and birth=#{birth}
+	</select>
+	
+	<!-- 회원정보 수정 구현 sql -->
+	<update id="emailPw" parameterType="userVO">
+		update users set password=HEX(AES_ENCRYPT(#{password},'enc-key'))  where _id = #{_id}
+	</update>
+		
+	<!-- 비밀번호 찾기 회원 유효 정보 찾기 -->
+	<select id="checkId" resultType="String">
+		select _id from users where identifier=#{identifier} and phone=#{phone} and email=#{email}
+	</select>
+	
+	<!-- 프로필 사진 업로드 -->
+	<update id="insertProfile"  parameterType="userVO">
+			update users set _profile=#{fileUrl} where identifier =#{identifier}
+	</update>
+	
+	<!-- 회원수정 정보 값-->
+	<select id="findUser" resultType="HashMap">
+		select * from users 
+		where _id =#{_id}
+	</select>
+	
+	<update id="noneProfile">
+		update users set _profile = null where _id = #{_id} 
+	</update>
+
+</mapper>

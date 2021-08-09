@@ -1,0 +1,386 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.egov.namul.mapper.PortfolioMapper">
+
+	<resultMap id="portfolio" type="com.egov.namul.vo.PortfolioVO">
+		<result property="_id" column="_id"/>
+		<result property="_user" column="_user"/>
+		<result property="_enterprise" column="_enterprise"/>
+		<result property="_professor" column="_professor"/>
+		<result property="_leader" column="_leader"/>
+		<result property="_file" column="_file"/>
+		<result property="fileName" column="fileName"/>
+		<result property="fileType" column="fileType"/>
+		<result property="fileUrl" column="fileUrl"/>
+		<result property="fileSize" column="fileSize"/>
+		<result property="name" column="name"/>
+		<result property="type" column="type"/>
+		<result property="status" column="status"/>
+		<result property="startDate" column="startDate"/>
+		<result property="endDate" column="endDate"/>
+		<result property="link" column="link"/>
+		<result property="score" column="score"/>
+		<result property="professorSignature" column="professorSignature"/>
+		<result property="studentSignature" column="studentSignature"/>
+		<result property="number1" column="number1"/>
+		<result property="number2" column="number2"/>
+		<result property="number3" column="number3"/>
+		<result property="content" column="content"/>
+		<result property="complain" column="complain"/>		
+		<result property="answer" column="answer"/>		
+		<result property="blockchainHashcode" column="blockchainHashcode"/>
+		<result property="createdAt" column="createdAt"/>
+		<result property="updatedAt" column="updatedAt"/>
+		<result property="deletedAt" column="deletedAt"/>
+	</resultMap>
+		
+	<!-- 글 쓰기  Mapper -->
+	<insert id="insertPortfolio"  parameterType="PortfolioVO"  useGeneratedKeys="true" keyProperty="_id">
+		insert into portfolios ( _user, _professor,_leader,  fileName, fileType, fileUrl, fileSize, name, type, status, startDate, endDate, link, score, content,createdAt,updatedAt)
+		values(#{_user},#{_professor},#{_leader},#{fileName},#{fileType},#{fileUrl},#{fileSize},#{name},#{type},#{status},#{startDate},#{endDate},#{link},#{score},#{content},now(),now())
+	</insert>
+	
+	<update id="insertFile"  parameterType="PortfolioVO">
+		update portfolios set fileName=#{fileName}, fileType=#{fileType}, fileUrl=#{fileUrl},fileSize=#{fileSize} where _id =(select * from (select _id from portfolios where 1+1 order by updatedAt desc limit 0,1)a)
+	</update>
+	
+	<!-- 상태별 카운트 -->
+	<select id="countEvaluation" resultType="int">
+		<if test="_user != null">  
+			select count(DISTINCT a._id) from portfolios a left join users b on a._user = b._id left join portfoliousers c on a._id = c._portfolio
+			where 1=1 and (b._id =#{_user} and a._user=#{_user}) and a.status = "evaluation"
+		</if>
+		<if test="_enterprise != null">
+			select count(DISTINCT a._id) from portfolios a left join users b on a._user = b._id left join portfolioenter c on a._id = c._portfolio
+			where 1=1  and c._enterprise =#{_enterprise} and a.status = "evaluation"
+		</if>
+		<if test="_professor != null">
+			select count(DISTINCT a._id) from portfolios a left join users b on a._user = b._id
+			where 1=1  and a._professor=#{_professor} and a.status = "evaluation"
+		</if>
+		<if test="name != null or content !=null ">
+		    	and (a.name like CONCAT('%',#{name},'%') or a.content like CONCAT('%',#{content},'%'))
+		    	<if test = "year != null" >
+	    			and left(a.createdAt,4) =#{year}
+	    			<if test = "month != null">
+	    				and substring(a.createdAt, 6, 2) =#{month}
+	    			</if>
+	    		</if>
+	    		<if test = "start_Date != null and end_Date != null">
+	    			<![CDATA[and  left(a.createdAt, 10) > #{start_Date} and left(a.createdAt, 10) < #{end_Date}]]>
+	    		</if>
+		   	</if>
+		   	<if test = "year != null" >
+	    		and left(a.createdAt,4) =#{year}
+	    		<if test = "month != null">  
+	    		and substring(a.createdAt, 6, 2) =#{month}
+	    		</if>
+	    	</if>
+	    	<if test = "start_Date != null and end_Date != null">
+	    		<![CDATA[and  left(a.createdAt, 10) > #{start_Date} and left(a.createdAt, 10) < #{end_Date}]]>
+	    	</if>	
+	    	<if test = "status != null">
+	    		and a.status = #{status}
+	    	</if>
+	</select>
+	
+	<select id="countDone" resultType="int">
+		<if test="_user != null">  
+			select count(DISTINCT a._id) from portfolios a left join users b on a._user = b._id left join portfoliousers c on a._id = c._portfolio
+			where 1=1 and ((b._id =#{_user} and a._user=#{_user}) or (c._user=#{_user})) and status = "done"
+		</if>
+		<if test="_enterprise != null">
+			select count(DISTINCT a._id) from portfolios a left join users b on a._user = b._id left join portfolioenter c on a._id = c._portfolio
+			where 1=1  and c._enterprise =#{_enterprise} and status = "done"
+		</if>
+		<if test="_professor != null">
+			select count(DISTINCT a._id) from portfolios a left join users b on a._user = b._id
+			where 1=1  and a._professor=#{_professor} and a.status = "done"
+		</if>
+		<if test="name != null or content !=null ">
+		    	and (a.name like CONCAT('%',#{name},'%') or a.content like CONCAT('%',#{content},'%'))
+		    	<if test = "year != null" >
+	    			and left(a.createdAt,4) =#{year}
+	    			<if test = "month != null">
+	    				and substring(a.createdAt, 6, 2) =#{month}
+	    			</if>
+	    		</if>
+	    		<if test = "start_Date != null and end_Date != null">
+	    			<![CDATA[and  left(a.createdAt, 10) > #{start_Date} and left(a.createdAt, 10) < #{end_Date}]]>
+	    		</if>
+		   	</if>
+		   	<if test = "year != null" >
+	    		and left(a.createdAt,4) =#{year}
+	    		<if test = "month != null">
+	    		and substring(a.createdAt, 6, 2) =#{month}
+	    		</if>
+	    	</if>
+	    	<if test = "start_Date != null and end_Date != null">
+	    		<![CDATA[and  left(a.createdAt, 10) > #{start_Date} and left(a.createdAt, 10) < #{end_Date}]]>
+	    	</if>	
+	    	<if test = "status != null">
+	    		and a.status = #{status}
+	    	</if>
+	</select>
+	<select id="countWait" resultType="int">
+		<if test="_user != null">  
+			select count(DISTINCT a._id) from portfolios a left join users b on a._user = b._id left join portfoliousers c on a._id = c._portfolio
+			where 1=1 and ((b._id =#{_user} and a._user=#{_user}) or (c._user=#{_user})) and status = "wait"
+		</if>
+		<if test="_enterprise != null">
+			select count(DISTINCT a._id) from portfolios a left join users b on a._user = b._id left join portfolioenter c on a._id = c._portfolio
+			where 1=1  and c._enterprise =#{_enterprise} and status = "wait"
+		</if>
+		<if test="_professor != null">
+			select count(DISTINCT a._id) from portfolios a left join users b on a._user = b._id
+			where 1=1  and a._professor=#{_professor} and a.status = "wait"
+		</if>
+		<if test="name != null or content !=null ">
+		    	and (a.name like CONCAT('%',#{name},'%') or a.content like CONCAT('%',#{content},'%'))
+		    	<if test = "year != null" >
+	    			and left(a.createdAt,4) =#{year}
+	    			<if test = "month != null">
+	    				and substring(a.createdAt, 6, 2) =#{month}
+	    			</if>
+	    		</if>
+	    		<if test = "start_Date != null and end_Date != null">
+	    			<![CDATA[and  left(a.createdAt, 10) > #{start_Date} and left(a.createdAt, 10) < #{end_Date}]]>
+	    		</if>
+		   	</if>
+		   	<if test = "year != null" >
+	    		and left(a.createdAt,4) =#{year}
+	    		<if test = "month != null">
+	    		and substring(a.createdAt, 6, 2) =#{month}
+	    		</if>
+	    	</if>
+	    	<if test = "start_Date != null and end_Date != null">
+	    		<![CDATA[and  left(a.createdAt, 10) > #{start_Date} and left(a.createdAt, 10) < #{end_Date}]]>
+	    	</if>	
+	    	<if test = "status != null">
+	    		and a.status = #{status}
+	    	</if>
+	</select>
+	<select id="countComplain" resultType="int">
+		<if test="_user != null">  
+			select count(DISTINCT a._id) from portfolios a left join users b on a._user = b._id left join portfoliousers c on a._id = c._portfolio
+			where 1=1 and ((b._id =#{_user} and a._user=#{_user}) or (c._user=#{_user})) and status = "complain"
+		</if>
+		<if test="_enterprise != null">
+			select count(DISTINCT a._id) from portfolios a left join users b on a._user = b._id left join portfolioenter c on a._id = c._portfolio
+			where 1=1  and c._enterprise =#{_enterprise} and status = "complain"
+		</if>
+		<if test="_professor != null">
+			select count(DISTINCT a._id) from portfolios a left join users b on a._user = b._id
+			where 1=1  and a._professor=#{_professor} and a.status = "complain"
+		</if>
+		<if test="name != null or content !=null ">
+		    	and (a.name like CONCAT('%',#{name},'%') or a.content like CONCAT('%',#{content},'%'))
+		    	<if test = "year != null" >
+	    			and left(a.createdAt,4) =#{year}
+	    			<if test = "month != null">
+	    				and substring(a.createdAt, 6, 2) =#{month}
+	    			</if>
+	    		</if>
+	    		<if test = "start_Date != null and end_Date != null">
+	    			<![CDATA[and  left(a.createdAt, 10) > #{start_Date} and left(a.createdAt, 10) < #{end_Date}]]>
+	    		</if>
+		   	</if>
+		   	<if test = "year != null" >
+	    		and left(a.createdAt,4) =#{year}
+	    		<if test = "month != null">
+	    		and substring(a.createdAt, 6, 2) =#{month}
+	    		</if>
+	    	</if>
+	    	<if test = "start_Date != null and end_Date != null">
+	    		<![CDATA[and  left(a.createdAt, 10) > #{start_Date} and left(a.createdAt, 10) < #{end_Date}]]>
+	    	</if>	
+	    	<if test = "status != null">
+	    		and a.status = #{status}
+	    	</if>
+	</select> 
+	
+	<!-- 리스트 총 갯수 확인 Mapper -->
+	<select id="countPortfolio" resultType="int">		
+		<if test="_user != null">  
+			select count(DISTINCT a._id) from portfolios a left join users b on a._user = b._id left join portfoliousers c on a._id = c._portfolio
+			where 1=1 and ((b._id =#{_user} and a._user=#{_user}) or (c._user=#{_user}))
+		</if>
+		<if test="_enterprise != null">
+			select count(DISTINCT a._id) from portfolios a left join users b on a._user = b._id left join portfolioenter c on a._id = c._portfolio
+			where 1=1  and c._enterprise =#{_enterprise} 
+		</if>
+		<if test="_professor != null">
+			select count(DISTINCT a._id) from portfolios a left join users b on a._user = b._id
+			where 1=1  and a._professor=#{_professor} 
+		</if>
+	    <if test="name != null or content !=null ">
+	    	and (a.name like CONCAT('%',#{name},'%') or a.content like CONCAT('%',#{content},'%'))
+	    	<if test = "year != null" >
+    			and left(a.createdAt,4) =#{year}
+    			<if test = "month != null">
+    				and substring(a.createdAt, 6, 2) =#{month}
+    			</if>
+    		</if>
+    		<if test = "start_Date != null and end_Date != null">
+    			<![CDATA[and  left(a.createdAt, 10) > #{start_Date} and left(a.createdAt, 10) < #{end_Date}]]>
+    		</if>
+	   	</if>
+	   	<if test = "year != null" >
+    		and left(a.createdAt,4) =#{year}
+    		<if test = "month != null">
+    		and substring(a.createdAt, 6, 2) =#{month}
+    		</if>
+    	</if>
+    	<if test = "start_Date != null and end_Date != null">
+    		<![CDATA[and  left(a.createdAt, 10) > #{start_Date} and left(a.createdAt, 10) < #{end_Date}]]>
+    	</if>
+    	<if test = "status != null">
+	    		and a.status = #{status}
+    	</if>
+	</select>
+	
+	<!-- 리스트 검색 && 페이징 처리 Mapper && 조건 검색 -->
+	<select id="selectPortfolio" resultType="HashMap">
+		<if test="_user != null">  
+			select a.*, b.name as username from portfolios a left join users b on a._user = b._id left join portfoliousers c on a._id = c._portfolio
+			where 1=1 and ((b._id =#{_user} and a._user=#{_user}) or (c._user=#{_user}))
+		</if>
+		<if test="_enterprise != null">
+			select a.*, b.name as username from portfolios a left join users b on a._user = b._id left join portfolioenter c on a._id = c._portfolio
+			where 1=1  and c._enterprise =#{_enterprise} 
+		</if>
+		<if test="_professor != null">
+			select a.*, b.name as username from portfolios a left join users b on a._user = b._id 
+			where 1=1  and a._professor=#{_professor} 
+		</if>
+		    <if test="name != null or content !=null ">
+		    	and (a.name like CONCAT('%',#{name},'%') or a.content like CONCAT('%',#{content},'%'))
+		    	<if test = "year != null" >
+	    			and left(a.createdAt,4) =#{year}
+	    			<if test = "month != null">
+	    			and substring(a.createdAt, 6, 2) =#{month}
+	    			</if>
+	    		</if>
+	    		<if test = "start_Date != null and end_Date != null">
+	    			<![CDATA[and  left(a.createdAt, 10) > #{start_Date} and left(a.createdAt, 10) < #{end_Date}]]>
+	    		</if>
+		   	</if>
+		   	<if test = "year != null" >
+	    		and left(a.createdAt,4) =#{year}
+	    		<if test = "month != null">
+	    		and substring(a.createdAt, 6, 2) =#{month}
+	    		</if>
+	    	</if>
+	    	<if test = "start_Date != null and end_Date != null">
+	    		<![CDATA[and  left(a.createdAt, 10) > #{start_Date} and left(a.createdAt, 10) < #{end_Date}]]>	    		
+	    	</if>
+	    	<if test = "status != null">
+	    		and a.status = #{status}
+	    	</if>
+		group by a._id 		
+		order by a.updatedAt desc
+		limit #{displayPost}, #{postNum}
+	</select>
+	
+	<!-- 교수 검색 Mapper -->
+	<select id="selectProfessor" resultType="HashMap">
+		select _id, type ,name, email,_profile, university from users where type= "professor"  
+			<if test="name != null">
+				 and name like CONCAT('%',#{name},'%')
+			</if>
+	</select>
+	
+	<!-- 리더 검색 Mapper -->
+	<select id="selectLeader" resultType="HashMap">
+		select _id, type, name, email,_profile, university from users where type= "student"
+			<if test="name != null">
+				and name like CONCAT('%',#{name},'%')
+			</if>
+	</select>
+	
+	<!-- 기업 검색 Mapper -->
+	<select id="selectEnter" resultType="HashMap">
+		select _id, type, name, email,_profile, university from users where type= "enterprise"
+			<if test="name != null">
+				and university like CONCAT('%',#{name},'%')  
+			</if>
+	</select>
+	
+	<!-- 리스트 상세정보  Mapper -->
+	<select id="selectView" resultType="HashMap">
+		select a.*,
+		(select name from users where _id=a._user) as leader,
+		(select name from users where _id=a._professor) as professor
+		 from portfolios a where a._id=#{portfolioId}
+	</select>
+	
+	<!--그룹 인원 검색 -->
+	<select id="selectViewGroup" resultType="HashMap">
+		select b._id, b.name from portfoliousers a left join users b on a._user=b._id where a._portfolio=#{portfolioId} order by b._id asc
+	</select>
+	
+	<!-- 기업 인원 검색 -->
+	<select id="selectViewEnter" resultType="HashMap">
+		select b._id, b.name from portfolioenter a left join users b on a._enterprise=b._id where a._portfolio=#{portfolioId} order by b._id asc
+	</select>
+	
+	<!-- 일부 수정 total형 검색 Mapper -->
+	<update id="updatePortfolio" parameterType="PortfolioVO">
+		update portfolios set status=#{status}, _user = #{_user}, _professor = #{_professor}, _leader = #{_leader}, name = #{name}, type = #{type}, startDate = #{startDate}, endDate = #{endDate}, link = #{link}, content = #{content}, updatedAt=now() where _id=#{portfolioId}
+	</update>
+	
+	<!-- 유저 아이디  Mapper -->
+	<select id="userIdentifier" resultType="String">
+		select identifier from users where _id = #{_user}
+	</select>
+	
+	<!-- 일부 수정 total형 검색 Mapper -->
+	<update id="updateStatus" parameterType="PortfolioVO">
+		update portfolios set status=#{status}, score=#{score}, updatedAt= now()
+		<if test="complain != null">
+		, complain = #{complain}
+		</if>
+		<if test="answer != null">
+		, answer = #{answer}
+		</if>
+		 where _id=#{portfolioId}
+	</update>
+	
+	<!-- 사인 업로드 -->
+	<update id="professorSignFile"  parameterType="PortfolioVO">
+		update portfolios set professorSignature=#{professorSignature} where _id =#{_id}
+	</update>
+	
+	<insert id="insertPortfolioMember">
+		insert portfoliousers(_user, _portfolio, createdAt, updatedAt) values(#{member}, #{portfolio}, now(), now())
+	</insert>
+	
+	<insert id="updatecomplete" parameterType="PortfolioVO">
+		insert portfolioenter(_enterprise, _portfolio, createdAt, updatedAt) values(#{enter}, #{_portfolio}, now(), now())
+	</insert>
+	
+	<insert id="deletePortfolioMember">
+		delete from portfoliousers where  _portfolio = #{portfolio}
+	</insert>
+	
+	<insert id="deletecomplete">
+		delete from portfolioenter where  _portfolio = #{_portfolio}
+	</insert>
+	
+	<select id="fileName" resultType="String">
+		select fileUrl from portfolios where _id =(select * from (select _id from portfolios where 1+1 order by createdAt desc limit 0,1)a)
+	</select>
+	
+	<update id="shaHash" parameterType="PortfolioVO">
+		update portfolios set shaHash = #{shaHash} where _id =(select * from (select _id from portfolios where 1+1 order by createdAt desc limit 0,1)a)
+	</update>
+		
+	<delete id="deletePortfolio" parameterType="int">
+		delete from portfolios where _id = #{_id}
+	</delete>
+	
+	<update id="deleteSha">
+		update portfolios set shaHash = null, fileName= null, fileType= null,  fileUrl = null , fileSize = 0 where _id = #{portfolioId} 
+	</update>
+
+</mapper>
